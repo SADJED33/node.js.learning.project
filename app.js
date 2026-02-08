@@ -1,18 +1,33 @@
 const express = require('express');
-const app = express();
 const fs = require('fs');
+const morgan = require('morgan');
+const app = express();
+
+app.use(morgan('dev'))
+
 app.use(express.json());
 
+app.use((req,res,next)=>{
+console.log('hello from the middleware');
+next();
+})
+
+app.use((req,res,next)=>{
+    req.requestTime = new Date().toISOString();
+    next();
+})
 
 
 const tours =JSON.parse( fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
 //function of  routs for all the data 
 const getAllTours = (req,res)=>{
- res.status(200).json({
-    status:'success',
-    results: tours.length,
-    data: {
+    console.log(req.requestTime);
+    res.status(200).json({
+     status:'success',
+     requestedAt: req.requestTime,
+     results: tours.length,
+     data: {
         tours
     }
  });
@@ -91,17 +106,51 @@ const deletTour =  (req, res) => {
     })
 
 }
+  
+const getAllUsers = (rep,res)=> {
+    res.status(500).json({
+        status: 'error',
+        message: 'this rout is not yet defined'
 
-//api routs for all the data 
-// app.get('/api/v1/tours', getAllTours);
-//api routs for one id 
-// app.get('/api/v1/tours/:id', getTour);
-// //add data to the json file 
-// // app.post('/api/v1/tours', creatTour)
-// //update the data in the json file rout
-// app.patch('/api/v1/tours/:id', updatTour)
-// //delete data rout
-// app.delete('/api/v1/tours/:id', deletTour)
+    })
+}
+
+const createUser = (rep,res)=> {
+    res.status(500).json({
+        status: 'error',
+        message: 'this rout is not yet defined'
+
+    })
+}
+
+
+
+const getUser = (rep,res)=> {
+    res.status(500).json({
+        status: 'error',
+        message: 'this rout is not yet defined'
+
+    })
+}
+
+
+
+const updateUser = (rep,res)=> {
+    res.status(500).json({
+        status: 'error',
+        message: 'this rout is not yet defined'
+
+    })
+}
+
+
+const deleteUser = (rep,res)=> {
+    res.status(500).json({
+        status: 'error',
+        message: 'this rout is not yet defined'
+
+    })
+}
 
 app
   .route('/api/v1/tours')
@@ -111,9 +160,17 @@ app
 app 
   .route('/api/v1/tours/:id')
   .get(getTour)
-  .patch(updatTour)
+  .patch(updatTour) 
   .delete(deletTour);
-
+app
+  .route('/api/v1/users')
+  .get(getAllUsers)
+  .post(createUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 //the server 
 const port = 3000;
