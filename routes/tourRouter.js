@@ -8,7 +8,7 @@ Router.param('id', tourControllers.checkId);
 Router
   .route('/')
   .get(tourControllers.getAllTours)
-  .post(tourControllers.creatTour);
+  .post(tourControllers.checkBody,tourControllers.creatTour);
 
 Router
   .route('/:id')
@@ -16,4 +16,4 @@ Router
   .patch(tourControllers.updatTour) 
   .delete(tourControllers.deletTour);
 
-module.exports=Router;
+module.exports=Router; 
